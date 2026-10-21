@@ -76,11 +76,11 @@
 
     <nav class="bg-white shadow-md sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-20">
-                <div class="flex items-center">
-                    <a href="#" class="flex-shrink-0 flex items-center gap-2 text-brand-600 font-bold text-2xl">
-                        <i class="fa-solid fa-utensils text-brand-500"></i>
-                        Warung Bengawan Solo
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center min-w-0 mr-2">
+                    <a href="#" class="flex items-center gap-2 text-brand-600 font-bold text-lg sm:text-2xl truncate">
+                        <i class="fa-solid fa-utensils text-brand-500 flex-shrink-0"></i>
+                        <span class="truncate">Warung Bengawan Solo</span>
                     </a>
                 </div>
                 <div class="hidden md:flex items-center space-x-8">
@@ -88,7 +88,7 @@
                     <a href="#menu" class="text-gray-600 hover:text-brand-600 font-medium transition-colors">Menu</a>
                     <a href="#kontak" class="text-gray-600 hover:text-brand-600 font-medium transition-colors">Kontak</a>
                 </div>
-                <div class="flex items-center">
+                <div class="flex items-center space-x-1 sm:space-x-3 flex-shrink-0">
                     <button onclick="toggleCart()" class="relative p-2 text-gray-600 hover:text-brand-600 transition-colors">
                         <i class="fa-solid fa-cart-shopping text-xl"></i>
                         <span id="cart-badge" class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/4 -translate-y-1/4 bg-red-600 rounded-full hidden">
@@ -96,8 +96,8 @@
                         </span>
                     </button>
                     <!-- Mobile menu button -->
-                    <div class="flex items-center md:hidden ml-4">
-                        <button id="mobile-menu-btn" class="text-gray-600 hover:text-brand-600 focus:outline-none">
+                    <div class="flex items-center md:hidden">
+                        <button id="mobile-menu-btn" class="p-2 text-gray-600 hover:text-brand-600 focus:outline-none">
                             <i class="fa-solid fa-bars text-2xl"></i>
                         </button>
                     </div>
@@ -235,7 +235,6 @@
 
             <!-- Cart Items -->
             <div id="cart-items" class="flex-1 overflow-y-auto p-4 space-y-4">
-                <!-- Items will be populated here -->
                 <div class="flex flex-col items-center justify-center h-full text-gray-400" id="empty-cart-msg">
                     <i class="fa-solid fa-basket-shopping text-4xl mb-3"></i>
                     <p>Keranjang belanja masih kosong.</p>
@@ -437,12 +436,11 @@
             if (overlay.classList.contains('hidden')) {
                 // Open
                 overlay.classList.remove('hidden');
-                // Small delay to allow display:block to apply before animating opacity
                 setTimeout(() => {
                     overlay.classList.remove('opacity-0');
                     panel.classList.remove('translate-x-full');
                 }, 10);
-                document.body.style.overflow = 'hidden'; // Prevent background scrolling
+                document.body.style.overflow = 'hidden';
             } else {
                 // Close
                 overlay.classList.add('opacity-0');
@@ -491,25 +489,6 @@
             }, 300);
         }
 
-        // Mini toast notification
-        function showNotification(html) {
-            const toast = document.createElement('div');
-            toast.className = 'fixed bottom-5 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-4 py-3 rounded-lg shadow-xl z-[70] flex items-center gap-3 transition-all duration-300 translate-y-10 opacity-0';
-            toast.innerHTML = `<i class="fa-solid fa-check-circle text-green-400"></i> <span class="text-sm">${html}</span>`;
-            document.body.appendChild(toast);
-
-            // Animate in
-            setTimeout(() => {
-                toast.classList.remove('translate-y-10', 'opacity-0');
-            }, 10);
-
-            // Animate out and remove
-            setTimeout(() => {
-                toast.classList.add('translate-y-10', 'opacity-0');
-                setTimeout(() => toast.remove(), 300);
-            }, 2500);
-        }
-
         // Checkout Process (Redirects to WhatsApp)
         function processCheckout() {
             if (cart.length === 0) return;
@@ -526,26 +505,20 @@
             orderText += `\n*Total Pesanan: ${formatRupiah(totalPrice)}*\n\n`;
             orderText += 'Mohon info ketersediaan produk. Terima kasih!';
 
-            // Encode text for URL
             const encodedText = encodeURIComponent(orderText);
-            // WhatsApp Number (Replace with real number)
             const waNumber = '6281775116456'; 
-            
             const waLink = `https://wa.me/${waNumber}?text=${encodedText}`;
 
-            // Close cart and clear
             toggleCart();
             cart = [];
             updateCartUI();
 
-            // Show success message before opening WA
             showMessageModal(
                 'Pesanan Diproses', 
                 'Anda akan diarahkan ke WhatsApp untuk menyelesaikan pembayaran dan pengiriman.', 
                 'info'
             );
 
-            // Open WA in new tab after short delay
             setTimeout(() => {
                 window.open(waLink, '_blank');
             }, 1500);
@@ -565,7 +538,6 @@
             }
         });
 
-        // Close mobile menu when a link is clicked
         mobileMenu.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', () => {
                 mobileMenu.classList.add('hidden');
@@ -578,7 +550,6 @@
             renderMenu('all');
             updateCartUI();
         };
-
     </script>
 </body>
 </html>
